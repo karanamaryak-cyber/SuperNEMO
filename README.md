@@ -1,130 +1,204 @@
 # Measurement of Off-Plane Radon Activity Using the 1e1γ Channel
 
+This repository contains a modularised version of the ROOT/C++ analysis developed for my MSc dissertation in Particle and Nuclear Physics at the University of Edinburgh.
 
-This repository contains a simplified ROOT implementation of the event-selection logic used to study off-plane radon backgrounds in the SuperNEMO Demonstrator through the `1e1γ` decay channel of `²¹⁴Bi`.
+The project investigated whether the **1e1γ decay channel of ²¹⁴Bi** could provide an independent method for measuring **²²²Rn activity within the SuperNEMO Demonstrator tracker**. Radon and its progeny are important backgrounds in searches for neutrinoless double-beta decay (0νββ), making their accurate measurement and mitigation essential.
 
-The code is a reduced version of the full analysis macro. It retains the ROOT tree reading, event-selection cuts, timing calculation, simulation efficiency calculation, radon activity calculation, and a simple sequential cut-flow summary. Plotting, diagnostic studies, and activity-comparison routines are not included.
+The analysis was performed using **Phase 0 and Phase 3 SuperNEMO data** and was compared with the established **1e1α (BiPo) radon analysis**.
 
-## Analysis sequence
+## Physics motivation
 
-Events are processed in the following order:
+SuperNEMO searches for neutrinoless double-beta decay using a tracker-calorimeter detector capable of reconstructing particle trajectories, energies and timing information.
+
+Radon contamination is an important background because its progeny, particularly **²¹⁴Bi**, can produce event topologies similar to those expected from 0νββ.
+
+The established BiPo analysis identifies ²¹⁴Bi through the characteristic 1e1α signature, consisting of an electron followed by an alpha particle originating from the same location. This project investigated an alternative channel in which ²¹⁴Bi undergoes beta decay to an excited state of ²¹⁴Po, followed by gamma emission, producing a **one-electron–one-gamma (1e1γ)** topology.
+
+## Analysis
+
+The analysis was applied to **502 experimental data runs** together with simulated ²¹⁴Bi decays on the tracker wires.
+
+Candidate 1e1γ events were identified through a sequential selection based on the reconstructed event topology, detector geometry, calorimeter timing and reconstructed energy.
+
+The principal selection stages were:
 
 1. **Photon-energy pre-cut**
+   - Phase 0: `Eγ > 0.300 MeV`
+   - Phase 3: `Eγ > 0.050 MeV`
 
-   * Phase 0: `Eγ > 0.300 MeV`
-   * Phase 3: `Eγ > 0.050 MeV`
+2. **1e1γ topology**
+   - Exactly one reconstructed electron
+   - Exactly one reconstructed gamma
 
-2. **Topology selection**
-
-   * Exactly one reconstructed electron
-   * Exactly one reconstructed gamma
-   * Exactly two entries in the particle-ID vector
-
-3. **Calorimeter TDC cut**
-
-   * Electron and gamma must both satisfy `−20 ns ≤ calo_tdc ≤ 300 ns`
+3. **Calorimeter timing**
+   - `−20 ns ≤ calo_tdc ≤ 300 ns`
 
 4. **Geometry selection**
+   - Main-Wall optical modules
+   - `77 mm < |x| < 337 mm`
+   - `−2000 mm < y < 1900 mm`
 
-   * Main-Wall optical modules only: `0 ≤ om_number < 520`
-   * Electron vertex: `77 mm < |x| < 337 mm`
-   * Electron vertex: `−2000 mm < y < 1900 mm`
+5. **Time-of-flight selection**
+   - Electron and gamma propagation times are reconstructed from their detector geometry and measured calorimeter times.
+   - Candidate events satisfy:
 
-5. **Timing selection**
-
-   * The electron velocity is calculated relativistically from its reconstructed kinetic energy.
-   * Electron and gamma times of flight are subtracted from their measured calorimeter times.
-   * The event must satisfy `Δt < 12 ns`, where:
-
-     `Δt = |(t_e,calo − L_e/v_e) − (t_γ,calo − L_γ/c)|`
+     `Δt < 12 ns`
 
 6. **Total-energy selection**
+   - `E_e + E_γ < 3.000 MeV`
 
-   * The reconstructed electron-plus-gamma energy must satisfy `E_total < 3.000 MeV`.
+The code reports a sequential cut flow showing the number of events surviving each stage of the selection.
 
-The cut flow printed for each file gives the number of events remaining after every sequential selection.
+## Time-of-flight reconstruction
 
-## ROOT tree input
+The electron velocity is calculated relativistically from its reconstructed kinetic energy. The electron and gamma flight times are then removed from their measured calorimeter times.
 
-The macro reads a TTree named `Result_tree`. The required branches include:
+The timing variable used for the selection is
 
-* `pid`, `energy`, `electron_number`, and `gamma_number`
-* `calo_tdc` and `om_number`
-* Data vertex branches: `first_vertex_x/y/z`
-* Simulation vertex branches: `vertex_track_first_end_x/y/z`
-* `vertex_extrapolation_calo_x/y/z`
-* `gamma_om_x/y/z`
+`Δt = |(t_e,calo − L_e/v_e) − (t_γ,calo − L_γ/c)|`
 
-The particle-ID convention used by the analysis is:
+where `L_e` and `L_γ` are the reconstructed electron and gamma path lengths.
 
-* Gamma: `pid = 0`
-* Electron: `pid = 1`
+Events with `Δt < 12 ns` are retained.
 
 ## Radon activity
 
-For each data run, the radon activity is calculated as:
+For each data run, the ²²²Rn activity is calculated from the number of selected 1e1γ events:
 
 `A = N_selected / (t × V × ε)`
 
 where:
 
-* `N_selected` is the number of events surviving all cuts.
-* `t` is the run duration in seconds.
-* `V = 15.4 m³` is the tracker volume.
-* `ε` is the phase-dependent efficiency reported in the submitted thesis:
+- `N_selected` is the number of events surviving the complete selection,
+- `t` is the run duration,
+- `V = 15.4 m³` is the tracker volume,
+- `ε` is the phase-dependent selection efficiency.
 
-  * Phase 0: `ε = 0.03191` (`3.191%`)
-  * Phase 3: `ε = 0.03366` (`3.366%`)
+The efficiencies obtained for the analysis were:
 
-The result is converted from `Bq/m³` to `mBq/m³`.
+- **Phase 0:** `ε = 3.191%`
+- **Phase 3:** `ε = 3.366%`
 
-## Running the data analysis
+Activity is reported in `mBq/m³`.
 
-Start ROOT:
+## Comparison with the BiPo analysis
 
-```bash
-root -l
+The calculated 1e1γ activities were compared with independent measurements obtained using the established **1e1α/BiPo channel**.
+
+Two complementary comparisons were performed:
+
+- the evolution of the measured radon activity with time;
+- the correlation between the 1e1γ and BiPo activity measurements.
+
+The activity correlation was fitted using
+
+`A_1e1γ = a A_1e1α + b`
+
+to quantify the relationship between the two measurements.
+
+## Main result
+
+The **1e1γ analysis reproduced the overall variation in radon activity with time observed by the BiPo analysis**, demonstrating that the channel is sensitive to changes in the radon contamination within the tracker.
+
+However, the 1e1γ method consistently measured substantially higher activities than the BiPo analysis. This indicates that additional background processes can produce the same electron-gamma topology and survive the 1e1γ event selection.
+
+The study therefore demonstrated the sensitivity of the 1e1γ channel to radon variations while also identifying **background contamination as the principal limitation to using the channel as an independent precision measurement of radon activity**.
+
+## Repository structure
+
+```text
+SuperNEMO/
+│
+├── src/
+│   ├── EventSelection.C
+│   ├── ActivityAnalysis.C
+│   ├── RunUtilities.C
+│   └── Plotting.C
+│
+├── plots/
+│   ├── phase0/
+│   └── phase3/
+│
+├── README.md
+└── .gitignore
 ```
 
-Load and compile the macro:
+### `EventSelection.C`
 
-```cpp
-.L cutzz.C+
+Implements the sequential 1e1γ event-selection pipeline, including topology, calorimeter timing, geometry, time-of-flight and total-energy requirements.
+
+### `ActivityAnalysis.C`
+
+Calculates the selected-event efficiency and run-by-run radon activity.
+
+### `RunUtilities.C`
+
+Contains utilities for extracting run information, identifying the detector phase and retrieving run timing information.
+
+### `Plotting.C`
+
+Contains ROOT routines for visualising the principal selection variables and final analysis results, including:
+
+- photon-energy distributions;
+- calorimeter timing;
+- reconstructed vertex distributions;
+- time-of-flight corrected `Δt`;
+- total electron-plus-gamma energy;
+- 1e1γ/BiPo activity comparison;
+- activity correlation and linear fit.
+
+### `plots/`
+
+Contains selected Phase 0 and Phase 3 figures illustrating the event selection and final activity comparisons.
+
+## ROOT input
+
+The analysis reads reconstructed events from a ROOT `TTree` named:
+
+```text
+Result_tree
 ```
 
-For Phase 0:
+Principal branches used include:
 
-```cpp
-CUTzz("input_files.txt", 0)
-```
+- `pid`
+- `energy`
+- `electron_number`
+- `gamma_number`
+- `calo_tdc`
+- `om_number`
+- `first_vertex_x/y/z`
+- `vertex_track_first_end_x/y/z`
+- `vertex_extrapolation_calo_x/y/z`
+- `gamma_om_x/y/z`
 
-For Phase 3:
+The particle-ID convention is:
 
-```cpp
-CUTzz("input_files.txt", 3)
-```
+- `pid = 0` → gamma
+- `pid = 1` → electron
 
-`input_files.txt` must contain one reconstructed ROOT-file path per line. For each valid run, the macro prints the run duration, selected-event count, efficiency, and activity directly in the ROOT terminal.
+## Software
 
-## Calculating simulation efficiencies
+The analysis was developed in **C++ using CERN ROOT** and uses ROOT functionality including:
 
-After loading the macro, run:
+- `TChain`
+- `TH1D` / `TH2D`
+- `TGraphErrors`
+- `TMultiGraph`
+- `TF1`
+- `TCanvas`
 
-```cpp
-calculate_simulation_efficiencies("simulation_input_files.txt")
-```
+## Scope of this repository
 
-The input list must contain exactly 20 simulation ROOT files. The calculation assumes `1,000,000` generated events per file and applies both the Phase 0 and Phase 3 selections to the same simulation sample.
+This repository is intended to provide a **representative and readable implementation of the core analysis**, rather than reproduce every diagnostic and specialised study contained in the complete dissertation analysis framework.
 
-The efficiencies printed by this diagnostic function are not passed automatically to the activity calculation. The activity calculation uses the fixed efficiencies reported in the submitted thesis, as listed above.
+The original analysis was developed using SuperNEMO collaboration data and computing infrastructure. Consequently, the repository does not distribute experimental ROOT datasets or collaboration-internal data products.
 
-## Scope
+## Dissertation
 
-This macro presents the core selection and activity-calculation logic. It does not contain the plotting, background-comparison, diagnostic CSV, or specialised investigation routines from the complete analysis code.
+**Measurement of Off-Plane Radon Activity Using the 1e1γ Channel**  
+Aryak Karanam  
+MSc Particle and Nuclear Physics  
+University of Edinburgh, 2026
 
-
-The efficiencies printed by this diagnostic function are not passed automatically to the activity calculation. The activity calculation uses the fixed efficiencies reported in the submitted thesis, listed above.
-
-Scope
-
-This macro presents the core selection and activity-calculation logic. It does not contain the plotting, background-comparison, diagnostic CSV, or specialised investigation routines from the complete analysis code.
+Supervised by **Dr Cheryl Patrick** and **Dr Xalbat Aguerre**.c CSV, or specialised investigation routines from the complete analysis code.
