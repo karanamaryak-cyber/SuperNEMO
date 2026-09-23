@@ -201,4 +201,4 @@ Aryak Karanam
 MSc Particle and Nuclear Physics  
 University of Edinburgh, 2026
 
-Supervised by **Dr Cheryl Patrick** and **Dr Xalbat Aguerre**.c CSV, or specialised investigation routines from the complete analysis code.
+Supervised by **Dr Cheryl Patrick** and **Dr Xalbat Aguerre**.
