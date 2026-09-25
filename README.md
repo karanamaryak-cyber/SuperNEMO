@@ -87,11 +87,15 @@ The 1e1γ activity measurements were compared with the established 1e1α (BiPo) 
 
 ### Phase 0
 
-![Phase 0 radon activity comparison](plots/phase0/phase0_activity_comparison.png)
+<p align="center">
+  <img src="plots/phase0/phase0_activity_comparison.png" width="650">
+</p>
 
 The Phase 0 measurements show that the 1e1γ activity follows the same time-dependent behaviour as the independent 1e1α measurement. In particular, the increase in activity during May is reproduced by both analyses. However, the absolute activity measured using the 1e1γ channel is systematically higher.
 
-![Phase 0 activity correlation](plots/phase0/phase0_activity_ax_plus_b_fit_no_chi2.png)
+<p align="center">
+  <img src="plots/phase0/phase0_activity_ax_plus_b_fit_no_chi2.png" width="650">
+</p>
 
 A run-by-run comparison shows a clear positive correlation between the two measurements. A linear fit,
 
@@ -106,7 +110,9 @@ The positive correlation demonstrates that the 1e1γ measurement responds to cha
 
 ### Phase 3
 
-![Phase 3 radon activity comparison](plots/phase3/phase3_activity_comparison_linear.png)
+<p align="center">
+  <img src="plots/phase3/phase3_activity_comparison_linear.png" width="650">
+</p>
 
 An important difference between the two data-taking periods was the installation of the **anti-radon tent before Phase 3**, which was designed to reduce radon entering the detector. A reduction in radon activity relative to Phase 0 is therefore expected.
 
@@ -114,7 +120,9 @@ This reduction is observed in both independent measurements. The 1e1α (BiPo) ac
 
 The 1e1γ measurement nevertheless remains systematically higher than the BiPo measurement.
 
-![Phase 3 activity correlation](plots/phase3/Ax+BPhase3Plot.png)
+<p align="center">
+  <img src="plots/phase3/Ax+BPhase3Plot.png" width="650">
+</p>
 
 The Phase 3 correlation gives:
 
