@@ -81,28 +81,63 @@ The efficiencies obtained for the analysis were:
 
 Activity is reported in `mBq/m³`.
 
-## Comparison with the BiPo analysis
+## Results
 
-The calculated 1e1γ activities were compared with independent measurements obtained using the established **1e1α/BiPo channel**.
+The 1e1γ activity measurements were compared with the established 1e1α (BiPo) measurements independently for Phase 0 and Phase 3. Two complementary comparisons were performed: the evolution of the measured radon activity with time and the run-by-run correlation between the two measurements.
 
-Two complementary comparisons were performed:
+### Phase 0
 
-- the evolution of the measured radon activity with time;
-- the correlation between the 1e1γ and BiPo activity measurements.
+![Phase 0 radon activity comparison](plots/phase0/phase0_activity_comparison(1).png)
 
-The activity correlation was fitted using
+The Phase 0 measurements show that the 1e1γ activity follows the same time-dependent behaviour as the independent 1e1α measurement. In particular, the increase in activity during May is reproduced by both analyses. However, the absolute activity measured using the 1e1γ channel is systematically higher.
+
+![Phase 0 activity correlation](plots/phase0/Ax+BfitPhase0(1).png)
+
+A run-by-run comparison shows a clear positive correlation between the two measurements. A linear fit,
 
 `A_1e1γ = a A_1e1α + b`
 
-to quantify the relationship between the two measurements.
+gives:
 
-## Main result
+- `a = 1.2171 ± 0.0170`
+- `b = 95.4762 ± 1.4648 mBq/m³`
 
-The **1e1γ analysis reproduced the overall variation in radon activity with time observed by the BiPo analysis**, demonstrating that the channel is sensitive to changes in the radon contamination within the tracker.
+The positive correlation demonstrates that the 1e1γ measurement responds to changes in radon activity. The substantial positive intercept, however, indicates an additional contribution to the selected 1e1γ event rate.
 
-However, the 1e1γ method consistently measured substantially higher activities than the BiPo analysis. This indicates that additional background processes can produce the same electron-gamma topology and survive the 1e1γ event selection.
+### Phase 3
 
-The study therefore demonstrated the sensitivity of the 1e1γ channel to radon variations while also identifying **background contamination as the principal limitation to using the channel as an independent precision measurement of radon activity**.
+![Phase 3 radon activity comparison](plots/phase3/phase3_activity_comparison_linear(2).png)
+
+An important difference between the two data-taking periods was the installation of the **anti-radon tent before Phase 3**, which was designed to reduce radon entering the detector. A reduction in radon activity relative to Phase 0 is therefore expected.
+
+This reduction is observed in both independent measurements. The 1e1α (BiPo) activity is substantially lower in Phase 3 than in Phase 0, and the 1e1γ analysis reproduces the same overall reduction. This provides further evidence that the 1e1γ channel is sensitive to changes in radon activity within the tracker.
+
+The 1e1γ measurement nevertheless remains systematically higher than the BiPo measurement.
+
+![Phase 3 activity correlation](plots/phase3/Ax+BPhase3Plot(1).png)
+
+The Phase 3 correlation gives:
+
+- `a = 7.0469 ± 0.1370`
+- `b = 57.3413 ± 0.3336 mBq/m³`
+
+A positive relationship between the two measurements remains visible in Phase 3. However, the substantially different scale and non-zero intercept indicate that the selected 1e1γ sample contains additional contributions beyond the radon signal measured by the BiPo analysis.
+
+### Interpretation
+
+Across both detector phases, the 1e1γ analysis reproduces the overall variation in radon activity observed independently by the established BiPo analysis. Importantly, it also reproduces the reduction in activity between Phase 0 and Phase 3 following the installation of the anti-radon tent.
+
+These results demonstrate that the 1e1γ topology contains a measurable component associated with radon activity. However, the systematically higher reconstructed activities indicate that additional processes contribute to the selected 1e1γ sample.
+
+One possible contribution is **²¹⁴Pb**, which belongs to the same ²²²Rn decay chain. The beta decay of ²¹⁴Pb can leave ²¹⁴Bi in an excited state, followed by gamma emission, potentially producing the same electron-gamma topology required by the 1e1γ selection. Since ²¹⁴Pb and ²¹⁴Bi are expected to be in secular equilibrium, their activities vary together. A ²¹⁴Pb contribution could therefore increase the activity inferred by the 1e1γ method while still allowing it to track changes in the underlying radon activity.
+
+In contrast, the delayed electron-alpha signature used by the BiPo analysis is more specific to the ²¹⁴Bi–²¹⁴Po decay sequence and is therefore less susceptible to this contribution.
+
+The 1e1γ channel therefore provides sensitivity to variations in radon activity, but additional background contributions must be understood and modelled before it can be used as an independent precision measurement of ²²²Rn activity.
+
+## Future work
+
+Future work should focus on identifying and quantifying the additional background contributions to the selected 1e1γ sample. In particular, simulating potential contributions from **²¹⁴Pb** would help determine whether decays within the ²²²Rn chain can explain the systematically higher activity measured by the 1e1γ analysis.
 
 ## Repository structure
 
